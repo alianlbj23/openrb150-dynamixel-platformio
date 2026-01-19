@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../workspace/ITRI/dynamixel"
+		},
+		{
+			"name": "openrb_150",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

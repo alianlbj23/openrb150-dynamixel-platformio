@@ -10,9 +10,6 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
 void setup()
 {
   Serial.begin(57600);
-  while (!Serial) {
-    ; // 等待 USB Serial
-  }
 
   Serial.println("=== DYNAMIXEL ID Scan Start ===");
 

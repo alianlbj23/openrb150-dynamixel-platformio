@@ -3,7 +3,6 @@ import os
 import sys
 import platform
 import subprocess
-from serial.tools import list_ports
 
 VENV_DIR = ".venv-openrb"
 REQUIRED_PACKAGES = ["pyserial"]
@@ -40,7 +39,7 @@ def ensure_venv():
         run([sys.executable, "-m", "venv", VENV_DIR])
 
     py = get_venv_python()
-    
+
     print("[INFO] Installing required packages in venv...")
     run([py, "-m", "pip", "install", "--upgrade", "pip"])
     run([py, "-m", "pip", "install", *REQUIRED_PACKAGES])
@@ -48,10 +47,11 @@ def ensure_venv():
     print("[INFO] Re-launching inside venv...")
     os.execv(py, [py] + sys.argv)
 
+
 def main():
     ensure_venv()
 
-    
+    from serial.tools import list_ports
 
     ports = list(list_ports.comports())
     if not ports:
@@ -59,21 +59,20 @@ def main():
         return 0
 
     # macOS/Linux: /dev/xxx；Windows: COMx
-    print()
-    print("=================================")
     for p in ports:
         dev = p.device
         desc = (p.description or "").strip()
         hwid = (p.hwid or "").strip()
 
+        # 你要「列出 /dev/ 和後面名稱」+「裝置名稱」
+        # 這裡同時顯示：/dev/cu.usbmodem1101 | Arduino ...（或其他描述）
         if platform.system() in ("Darwin", "Linux"):
             if dev.startswith("/dev/"):
                 print(f"{dev} | {desc}")
         else:
             # Windows 沒有 /dev，就列 COM + 裝置名稱
             print(f"{dev} | {desc} | {hwid}")
-    print("=================================")
-    print()
+
     return 0
 
 

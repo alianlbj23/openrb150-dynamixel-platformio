@@ -1,33 +1,40 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# This script builds the development environment Docker image.
+# This script builds the development environment Docker image (always linux/amd64).
 
 # --- Configuration ---
-# The name for the Docker image we are building.
-IMAGE_NAME="openrb150-dev-env"
+IMAGE_NAME="${IMAGE_NAME:-openrb150-dev-env:latest}"
+DOCKER_PLATFORM="${DOCKER_PLATFORM:-linux/amd64}"
 
-# Get the absolute path to the project root (the parent directory of this script's location)
-# This is used as the build context so that .dockerignore works correctly.
+# Project root (parent directory of this script)
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 echo "Project root (build context): ${PROJECT_ROOT}"
 echo "Dockerfile path: ${PROJECT_ROOT}/docker/Dockerfile"
+echo "Host arch: $(uname -m)"
+echo "Target platform: ${DOCKER_PLATFORM}"
+echo "Image tag: ${IMAGE_NAME}"
+echo ""
+
+# --- Ensure buildx is available ---
+if ! docker buildx version >/dev/null 2>&1; then
+  echo "Error: docker buildx is not available."
+  echo "Please enable BuildKit/buildx (Docker Desktop usually includes it)."
+  exit 1
+fi
 
 # --- Build the Docker Image ---
-echo "Building Docker image '${IMAGE_NAME}'..."
+echo "Building Docker image '${IMAGE_NAME}' for platform ${DOCKER_PLATFORM}..."
 
-# We use the project root as the build context.
-# -t: Tags the image with a name (e.g., "openrb150-dev-env").
-# -f: Specifies the path to the Dockerfile.
-# The final argument "." sets the build context to the project root.
-docker build -t "${IMAGE_NAME}" -f "${PROJECT_ROOT}/docker/Dockerfile" "${PROJECT_ROOT}"
-
-# Check if the build was successful
-if [ $? -ne 0 ]; then
-    echo "Docker build failed. Aborting."
-    exit 1
-fi
+docker buildx build \
+  --platform "${DOCKER_PLATFORM}" \
+  --load \
+  -t "${IMAGE_NAME}" \
+  -f "${PROJECT_ROOT}/docker/Dockerfile" \
+  "${PROJECT_ROOT}"
 
 echo ""
 echo "Docker image '${IMAGE_NAME}' built successfully."
-echo "You can now start the development environment by running: docker/start-dev.sh"
+echo "Next:"
+echo "  ./docker/run.sh"

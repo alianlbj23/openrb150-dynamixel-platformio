@@ -57,8 +57,10 @@ void setup() {
   dxl.setPortProtocolVersion(DXL_PROTOCOL);
   for (int i = 0; i < NUM_DXL; i++) {
     dxl.torqueOff(dxl_id[i]);
-    dxl.setOperatingMode(dxl_id[i], OP_POSITION);
+    dxl.setOperatingMode(dxl_id[i], OP_CURRENT_BASED_POSITION);
     dxl.torqueOn(dxl_id[i]);
+    // 夾之前先設最大電流
+    dxl.setGoalCurrent(dxl_id[i], 250);   // mA，自己微調
   }
 
   // 2. 初始化 micro-ROS

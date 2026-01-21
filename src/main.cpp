@@ -7,7 +7,7 @@
 #include <rclc/executor.h>
 #include <rmw_microros/rmw_microros.h>
 
-#include <std_msgs/msg/float32_multi_array.h> // 🌟 改用 MultiArray
+#include <std_msgs/msg/float32_multi_array.h>
 
 // ================= DYNAMIXEL 設定 =================
 #define DXL_SERIAL   Serial1
@@ -21,7 +21,7 @@ uint8_t dxl_id[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
 // ================= micro-ROS 資源 =================
 rcl_subscription_t hand_sub;
-std_msgs__msg__Float32MultiArray hand_msg; // 🌟 訊息類型更改
+std_msgs__msg__Float32MultiArray hand_msg;
 
 rclc_executor_t executor;
 rclc_support_t support;
@@ -39,13 +39,10 @@ uint32_t degToPos(double deg) {
 void hand_callback(const void * msgin) {
   const std_msgs__msg__Float32MultiArray * msg = (const std_msgs__msg__Float32MultiArray *)msgin;
   
-  // 檢查收到的陣列長度
-  uint8_t count = (msg->data.size < NUM_DXL) ? msg->data.size : NUM_DXL;
+  if (msg->data.size >= NUM_DXL) {
+    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
 
-  if (count > 0) {
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN)); 
-
-    for (uint8_t i = 0; i < count; i++) {
+    for (uint8_t i = 0; i < NUM_DXL; i++) {
       dxl.setGoalPosition(dxl_id[i], degToPos(msg->data.data[i]));
     }
   }

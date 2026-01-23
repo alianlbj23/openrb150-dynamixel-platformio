@@ -57,3 +57,7 @@ The project's `platformio.ini` contains the following important settings:
 3.  Open the project folder in VS Code.
 4.  PlatformIO will automatically install the required toolchains and libraries.
 5.  Use the "Build" and "Upload" buttons in the PlatformIO toolbar to compile and upload your code.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -58,6 +58,19 @@ The project's `platformio.ini` contains the following important settings:
 4.  PlatformIO will automatically install the required toolchains and libraries.
 5.  Use the "Build" and "Upload" buttons in the PlatformIO toolbar to compile and upload your code.
 
+## Running micro-ROS Agent
+
+To connect your OpenRB-150 to ROS2 using micro-ROS, you need to run a micro-ROS agent on your host machine. Use the following Docker command:
+
+```bash
+docker run -it --rm --net=host --privileged \
+  -v /dev:/dev \
+  microros/micro-ros-agent:jazzy \
+  serial --dev /dev/ttyACM0 -b 115200 -v6
+```
+
+**Note**: The micro-ROS agent version (`jazzy` in this example) should match the ROS2 distribution specified in `platformio.ini`. To change the ROS2 version, modify the `board_microros_distro` parameter in the `platformio.ini` file.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

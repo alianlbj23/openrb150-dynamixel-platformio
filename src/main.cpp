@@ -9,7 +9,6 @@
 
 #include <std_msgs/msg/float32_multi_array.h>
 
-// ================= DYNAMIXEL 設定 =================
 #define DXL_SERIAL   Serial1
 #define DXL_DIR_PIN  -1    
 #define DXL_PROTOCOL 2.0
@@ -19,7 +18,6 @@
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
 uint8_t dxl_id[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
-// ================= micro-ROS 資源 =================
 rcl_subscription_t hand_sub;
 std_msgs__msg__Float32MultiArray hand_msg;
 
@@ -30,7 +28,6 @@ rcl_node_t node;
 
 #define LED_PIN LED_BUILTIN
 
-// ================= 輔助函式 =================
 uint32_t degToPos(double deg) {
   return (uint32_t)(deg * 4095.0 / 360.0);
 }
@@ -52,18 +49,15 @@ void hand_callback(const void * msgin) {
 void setup() {
   pinMode(LED_PIN, OUTPUT);
 
-  // 1. 初始化 Dynamixel
   dxl.begin(BAUDRATE);
   dxl.setPortProtocolVersion(DXL_PROTOCOL);
   for (int i = 0; i < NUM_DXL; i++) {
     dxl.torqueOff(dxl_id[i]);
     dxl.setOperatingMode(dxl_id[i], OP_CURRENT_BASED_POSITION);
     dxl.torqueOn(dxl_id[i]);
-    // 夾之前先設最大電流
-    dxl.setGoalCurrent(dxl_id[i], 250);   // mA，自己微調
+    dxl.setGoalCurrent(dxl_id[i], 250);
   }
 
-  // 2. 初始化 micro-ROS
   set_microros_serial_transports(Serial);
   delay(2000);
 
@@ -74,24 +68,19 @@ void setup() {
   }
   digitalWrite(LED_PIN, HIGH);
 
-  // 3. 初始化 rclc & Node
   rclc_support_init(&support, 0, NULL, &allocator);
   rclc_node_init_default(&node, "hand_node", "", &support);
 
-  // 4. 🌟 初始化 MultiArray 記憶體 🌟
-  // 比起 JointTrajectory，這只需要分配一個單純的 float 陣列
   std_msgs__msg__Float32MultiArray__init(&hand_msg);
   hand_msg.data.data = (float *)malloc(NUM_DXL * sizeof(float));
   hand_msg.data.capacity = NUM_DXL;
   hand_msg.data.size = 0;
 
-  // 5. 初始化 Subscription
   rclc_subscription_init_default(
     &hand_sub, &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32MultiArray), 
     "/hand_controller");
 
-  // 6. 初始化 Executor
   executor = rclc_executor_get_zero_initialized_executor();
   rclc_executor_init(&executor, &support.context, 1, &allocator);
   rclc_executor_add_subscription(&executor, &hand_sub, &hand_msg, &hand_callback, ON_NEW_DATA);
@@ -100,7 +89,6 @@ void setup() {
 void loop() {
   rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10));
   
-  // 維持連線同步
   static unsigned long last_sync = 0;
   if (millis() - last_sync > 100) {
     (void) rmw_uros_sync_session(100);

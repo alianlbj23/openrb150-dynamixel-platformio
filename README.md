@@ -2,6 +2,17 @@
 
 This is a sample project for developing on the [Robotis OpenRB-150](https://en.robotis.com/shop_en/item.php?it_id=902-0183-000) using [PlatformIO](https://platformio.org/), integrated with the [Dynamixel2Arduino](https://github.com/ROBOTIS-GIT/Dynamixel2Arduino) library.
 
+## Related Resources
+
+### OpenRB-150 Arduino Development Board
+Arduino-compatible controller with 4 dedicated DYNAMIXEL ports, supporting X/MX/AX/P series motors.  
+📖 [OpenRB-150 Documentation](https://emanual.robotis.com/docs/en/parts/controller/openrb-150/)
+
+### DYNAMIXEL Wizard 2.0
+Official GUI tool for configuring DYNAMIXEL motors - supports firmware updates, motor testing, real-time data plotting, and control table management.  
+📖 [DYNAMIXEL Wizard 2.0 Documentation](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/)  
+💾 Download: [Windows](http://www.robotis.com/service/download.php?no=1670) | [Linux](http://www.robotis.com/service/download.php?no=1671) | [macOS](http://www.robotis.com/service/download.php?no=1760)
+
 ## Project Structure
 
 ```

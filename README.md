@@ -4,6 +4,18 @@ This is a sample project for developing on the [Robotis OpenRB-150](https://en.r
 
 ## Related Resources
 
+### PlatformIO Setup Reference
+Configuration reference for using OpenRB-150 with PlatformIO.  
+🔗 [Forum Discussion](https://forum.robotis.com/t/using-rb-150-with-platformio/6571/2)
+
+### Dynamixel2Arduino Library
+Official Dynamixel2Arduino library reference and documentation.  
+📖 [Library Reference](https://www.arduinolibraries.info/libraries/dynamixel2-arduino)
+
+### OpenRB-150 Board Driver
+Official GitHub repository for OpenRB-150 board support.  
+🔗 [GitHub Repository](https://github.com/ROBOTIS-GIT/OpenRB-150)
+
 ### OpenRB-150 Dynamixel ROS Controller
 ROS controller package that uses rosbridge to connect and control Dynamixel motors on OpenRB-150 MCU flashed with micro-ROS firmware.  
 🔗 [GitHub Repository](https://github.com/alianlbj23/openrb150-dynamixel-ros-controller)

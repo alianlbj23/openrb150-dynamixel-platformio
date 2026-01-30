@@ -4,6 +4,10 @@ This is a sample project for developing on the [Robotis OpenRB-150](https://en.r
 
 ## Related Resources
 
+### OpenRB-150 Dynamixel ROS Controller
+ROS controller package that uses rosbridge to connect and control Dynamixel motors on OpenRB-150 MCU flashed with micro-ROS firmware.  
+🔗 [GitHub Repository](https://github.com/alianlbj23/openrb150-dynamixel-ros-controller)
+
 ### OpenRB-150 Arduino Development Board
 Arduino-compatible controller with 4 dedicated DYNAMIXEL ports, supporting X/MX/AX/P series motors.  
 📖 [OpenRB-150 Documentation](https://emanual.robotis.com/docs/en/parts/controller/openrb-150/)
